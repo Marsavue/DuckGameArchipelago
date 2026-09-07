@@ -1016,6 +1016,10 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemNumber("Death Link Amnesty", field: new FieldBinding(ArchipelagoClient.slotData, "deathLinkAmnestyMax", min: 0f, max: 100f), step: 1));
 
+            menu.Add(new UIMenuItemToggle("Send Lower Medals", field: new FieldBinding(ArchipelagoClient.slotData, "sendLowerMedals")));
+            
+            menu.Add(new UIText(" ", Color.White));
+
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true));
             menu.Close();
             menu.SetBackFunction(new UIMenuActionOpenMenu(menu, pOptionsMenu));

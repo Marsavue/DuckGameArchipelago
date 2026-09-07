@@ -675,5 +675,8 @@ namespace DuckGame
             contextMenu.AddItem(editorGroupMenu);
             return contextMenu;
         }
+        public void Move(Vec2 newPos){
+            position = newPos;
+        }
     }
 }

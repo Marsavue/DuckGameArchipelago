@@ -13,7 +13,9 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
+// using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
+// using Newtonsoft.Json.Linq;
 
 namespace DuckGame
 {   
@@ -97,8 +99,8 @@ namespace DuckGame
             {"Magnum",typeof(Magnum)},
             {"Combat Shotgun",typeof(CombatShotgun)},
             {"Chaingun",typeof(Chaingun)},
-            {"Mace Collar",typeof(MaceCollar)},
-            {"Weight Ball",typeof(WeightBall)},
+            // {"Mace Collar",typeof(MaceCollar)},
+            {"Mace",typeof(WeightBall)},
             {"Phaser",typeof(Phaser)},
             {"Wall Boots",typeof(WallBoots)},
             {"Flower",typeof(Flower)},
@@ -213,6 +215,7 @@ namespace DuckGame
             session.Items.ItemReceived += ItemReceived;
             session.Socket.SocketClosed += SessionSocketClosed;
             session.Socket.ErrorReceived += SessionErrorReceived;
+            // session.Socket.PacketReceived += OnPacketReceived;
 
             LoginResult result;
 
@@ -237,7 +240,7 @@ namespace DuckGame
                 return; // Did not connect, show the user the contents of `errorMessage`
             }
             LoginSuccessful loginSuccess = (LoginSuccessful)result;
-            deathLink = DeathLinkProvider.CreateDeathLinkService(session);
+            deathLink = session.CreateDeathLinkService();
             deathLink.OnDeathLinkReceived += DeathLinkReceived;
             deathLinkAmnesty = 0;
             List<string> enabledMedals = new List<string>(){}; 
@@ -253,6 +256,7 @@ namespace DuckGame
             slotData.deathLinkAmnestyMax = (int)(long)loginSuccess.SlotData["death_link_amnesty"];
             HUD.AddInputChangeDisplay("@PLUG@|LIME|AP Connected");
             CheckIfGoaled();
+            // CreateInitialPlayers();
         }
         public static void Disconnect(){
             if (session!=null&&session.Socket.Connected){
@@ -262,6 +266,7 @@ namespace DuckGame
             availableItems.Clear();
             popupQueue.Clear();
             fillerQueue.Clear();
+            // otherDucks.Clear();
             HUD.AddInputChangeDisplay("@UNPLUG@|RED|AP Disconnected");
         }
         public static bool CheckConnection(){
@@ -305,6 +310,89 @@ namespace DuckGame
         private static void SessionErrorReceived(Exception e, string message){
             Disconnect();
         }
+        // private static readonly Dictionary<string,TargetDuck> otherDucks = new Dictionary<string,TargetDuck>{};
+        // private static void OnPacketReceived(ArchipelagoPacketBase packet){
+        //     Console.WriteLine(packet);
+        //     switch (packet){
+        //         case BouncedPacket:
+        //             // break;
+        //             BouncedPacket bPacket = (BouncedPacket)packet;
+        //             Dictionary<string,JToken> bPacketData = bPacket.Data;
+        //             foreach(string key in bPacketData.Keys){
+        //                 Console.WriteLine(key);}
+        //             if (bPacketData.Keys.Contains("dgpvdata")){
+        //                 if (bPacketData["dgpvdata"]["slotName"].Value<string>()!=slot){
+        //                     // Console.WriteLine(bPacketData["data"]["slotName"].Value<string>());
+        //                     string playerSlot = bPacketData["data"]["slotName"].Value<string>();
+        //                     int x = bPacketData["dgpvdata"]["posx"].Value<int>();
+        //                     int y = bPacketData["dgpvdata"]["posy"].Value<int>();
+        //                     if (Level.current is ArcadeLevel){
+        //                         if (otherDucks.Keys.Contains(playerSlot)){
+        //                             otherDucks[playerSlot].Move(new Vec2(x,y+6));
+        //                         }
+        //                         // else{
+        //                         //     ArcadeLevel cLev = Level.current as ArcadeLevel;
+        //                         //     TargetDuck thisDuck = new TargetDuck(x,y+6,TargetStance.Stand);
+        //                         //     Level.Add(thisDuck);
+        //                         //     thisDuck.sequence.Activate();
+        //                         //     otherDucks.Add(playerSlot,thisDuck);
+        //                         //     // Sprite playerSprite = new Sprite("CHALLOCKED",0,0);
+        //                         //     // playerSprite.CenterOrigin();
+        //                         //     // Graphics.Draw(ref _sprite, x, y);
+        //                         //     Console.WriteLine(x);
+        //                         //     Console.WriteLine(y);
+        //                         // }
+        //                     }
+        //                 }
+        //             }
+        //             // if (bPacketData["data"]["slotName"].ToString() != slot){
+        //                 // foreach(string key in bPacketData.Children().OfType<JProperty>()){
+        //                 //     Console.WriteLine(key);
+        //                 //     Console.WriteLine(bPacketData["data"][key]);
+        //                 // }
+        //             // }
+        //             // Console.WriteLine(bPacket.proper)
+        //             // foreach (var p in bPacket.GetType().GetProperties()){
+        //             //     Console.WriteLine(p);
+        //             // }
+        //             // foreach (string key in bPacket.Data.Keys)
+        //             // {
+        //             //     Console.WriteLine(key);
+        //             // }
+        //             break;
+        //         case JoinPrintJsonPacket:
+        //             JoinPrintJsonPacket jPacket = (JoinPrintJsonPacket)packet;
+        //             PlayerInfo jinfo = session.Players.GetPlayerInfo(jPacket.Slot);
+        //             if (jinfo.Game == "DuckGame"&& !otherDucks.Keys.Contains(jinfo.Name)){
+        //                 TargetDuck thisDuck = new TargetDuck(0,0,TargetStance.Stand);
+        //                 Level.Add(thisDuck);
+        //                 thisDuck.sequence.Activate();
+        //                 otherDucks.Add(jinfo.Name,thisDuck);
+        //             }
+        //             break;
+        //         case LeavePrintJsonPacket:
+        //             LeavePrintJsonPacket lPacket = (LeavePrintJsonPacket)packet;
+        //             PlayerInfo linfo = session.Players.GetPlayerInfo(lPacket.Slot);
+        //             if (linfo.Game == "DuckGame"&& otherDucks.Keys.Contains(linfo.Name)){
+        //                 Level.Remove(otherDucks[linfo.Name]);
+        //                 otherDucks.Remove(linfo.Name);
+        //             }
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        // }
+        //// Should change to normal ducks
+        // private static void CreateInitialPlayers(){
+        //     foreach (PlayerInfo newPlayer in session.Players.AllPlayers){
+        //         if (newPlayer.Game == "DuckGame"&& !otherDucks.Keys.Contains(newPlayer.Name)){
+        //             TargetDuck thisDuck = new TargetDuck(0,0,TargetStance.Stand);
+        //             Level.Add(thisDuck);
+        //             thisDuck.sequence.Activate();
+        //             otherDucks.Add(newPlayer.Name,thisDuck);
+        //         }
+        //     }
+        // }
         private static void DeathLinkReceived(DeathLink deathLink){
             popupQueue.Insert(0, new PopupQueueData("DL: |AQUA|"+deathLink.Source+" |WHITE|- ","|RED|",deathLink.Cause));
             if (Level.current==currentLevel){
@@ -342,6 +430,9 @@ namespace DuckGame
             }
             return allItems;
         }
+        public static int GetCollectedMedals(){
+            return session.Locations.AllLocationsChecked.Count;
+        }
         public static TrophyType GetBestTrophy(string level){
             TrophyType highestMedal = TrophyType.Baseline;
             if (session==null){return highestMedal;}
@@ -357,8 +448,9 @@ namespace DuckGame
         private static bool CheckIfGoaled(int extra=0){
             if (session.Locations.AllLocationsChecked.Count+extra >= slotData.medalCountGoal){
                 session.SetGoalAchieved();
+                firstPopupRun = false;
                 popupQueue.Clear();
-                HUD.AddInputChangeDisplay("|LIME| GAME IS BEATEN YAYAY <333 ");
+                popupQueue.Insert(0, new PopupQueueData(" ","|LIME|","GAME IS BEATEN YAYAY <333 "));
                 return true;
             }
             return false;
@@ -407,8 +499,35 @@ namespace DuckGame
             ProcessPopupQueue();
             if (CheckConnectionNoPopup()){
                 ProcessFillerQueue();
+                // SendOthersPosition();
             }
         }
+        // private static long posPacketFrame = 0;
+        // private static void SendOthersPosition(){
+        //     if (posPacketFrame>0){
+        //         posPacketFrame+=1;
+        //         if (posPacketFrame == 3){
+        //             posPacketFrame = 0;
+        //         }
+        //         return;
+        //     }
+        //     if (Level.current is ArcadeLevel){
+        //         JObject currentData = new JObject();
+        //         currentData["slotName"] = slot;
+        //         currentData["posx"] = (int)(Level.current as ArcadeLevel).GetDuckPos().x;
+        //         currentData["posy"] = (int)(Level.current as ArcadeLevel).GetDuckPos().y;
+        //         BouncePacket newPacket = new BouncePacket(){
+        //             Games=new List<string>(){
+        //                 "DuckGame"
+        //             },
+        //             Data = new Dictionary<string, JToken> {
+        //                 {"dgpvdata", currentData},
+        //             }
+        //         };
+        //         session.Socket.SendPacketAsync(newPacket);
+        //         posPacketFrame+=1;
+        //     }
+        // }
         private static long popupFrame = 0;
         private static void ProcessPopupQueue(){
             if (popupFrame>0){

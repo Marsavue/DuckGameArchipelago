@@ -267,7 +267,7 @@ namespace DuckGame
                 string deathLinkText = "";
                 if(ArchipelagoClient.slotData.DeathLinkEnabled){deathLinkText+="|RED|"+ArchipelagoClient.slotData.DeathLinkEnabled.ToString()+"\n|WHITE|DL Amnesty: "+ArchipelagoClient.deathLinkAmnesty+" of "+ArchipelagoClient.slotData.deathLinkAmnestyMax;}
                 else{deathLinkText+=ArchipelagoClient.slotData.DeathLinkEnabled.ToString();}
-                HUD.AddCornerMessageWithScale(HUDCorner.BottomLeft, "@PLUG@|LIME|AP Connected\n|WHITE|DL: "+deathLinkText, 0.75f);
+                HUD.AddCornerMessageWithScale(HUDCorner.BottomLeft, "@PLUG@|LIME|AP Connected\n|WHITE|Medals: "+ArchipelagoClient.GetCollectedMedals()+"\n|WHITE|DL: "+deathLinkText, 0.75f);
             }else{
                 HUD.AddCornerMessageWithScale(HUDCorner.BottomLeft, "@UNPLUG@|RED|AP Disconnected", 0.75f);
             }
@@ -275,6 +275,20 @@ namespace DuckGame
         public void RagdollDuck(){
             if (_duck != null){
                 _duck.GoRagdoll();
+            }
+        }
+        public Vec2 GetDuckPos(){
+            if (_duck != null){
+                return new Vec2((int)_duck.x,(int)_duck.y);
+            }else{
+                return new Vec2(0,0);
+            }
+        }
+        public Profile GetDuckProfile(){
+            if (_duck != null){
+                return _duck.profile;
+            }else{
+                return null;
             }
         }
 
