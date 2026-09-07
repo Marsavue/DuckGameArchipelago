@@ -9,7 +9,10 @@ Nothing I make is ever developed using AI, that does not necessarily include Duc
 - Locations are medals of your choice
 - Several simple yaml options
 
+
 APWorld - https://github.com/Marsavue/Archipelago-DuckGame/releases/latest
+
+PopTracker - https://github.com/blakelmenakle/Duck-Game-Poptracker/releases/latest Thanks to Blakel
 
 Check pins in the [Archipelago discord](https://discord.com/channels/731205301247803413/1526871890226974750) for more info
 
