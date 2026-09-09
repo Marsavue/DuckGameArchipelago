@@ -410,7 +410,11 @@ namespace DuckGame
                         deathLinkAmnesty=0;
                         popupQueue.Insert(0, new PopupQueueData("SEND DL: ","|RED|",cause));
                         deathLink.SendDeathLink(new DeathLink(slot,cause));
-                    }}}
+                    }else{
+                        popupQueue.Insert(0, new PopupQueueData("DL AMNESTY: |RED|"+deathLinkAmnesty.ToString(),"|WHITE|/|RED|",slotData.deathLinkAmnestyMax.ToString()));
+                    }
+                }
+            }
         }
         public static bool LevelExists(string level){
             CheckConnection();
