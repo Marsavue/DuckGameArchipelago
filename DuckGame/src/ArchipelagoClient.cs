@@ -197,6 +197,7 @@ namespace DuckGame
                 deathLinkAmnestyMax = (int)newdeathLinkAmnesty;
             }
         }
+        private static bool knownGoaled = false;
         private static ChallengeLevel currentLevel;
         private static Duck currentDuck;
 
@@ -207,6 +208,7 @@ namespace DuckGame
             firstPopupRun = true;
             fillerQueue.Clear();
             firstFillerRun = true;
+            knownGoaled = false;
             bool success = int.TryParse(port, out int portNum);
             if (!success){
                 return;
@@ -452,9 +454,12 @@ namespace DuckGame
         private static bool CheckIfGoaled(int extra=0){
             if (session.Locations.AllLocationsChecked.Count+extra >= slotData.medalCountGoal){
                 session.SetGoalAchieved();
-                firstPopupRun = false;
-                popupQueue.Clear();
-                popupQueue.Insert(0, new PopupQueueData(" ","|LIME|","GAME IS BEATEN YAYAY <333 "));
+                if (!knownGoaled){
+                    knownGoaled = true;
+                    firstPopupRun = false;
+                    popupQueue.Clear();
+                    popupQueue.Insert(0, new PopupQueueData(" ","|LIME|","GAME IS BEATEN YAYAY <333 "));
+                }
                 return true;
             }
             return false;
@@ -478,11 +483,9 @@ namespace DuckGame
                 }
             }
             if (locations.Count > 0){
-                if (CheckIfGoaled(locations.Count)){return;
-                }else{
-                    new Task(() => {session.Locations.ScoutLocationsAsync(locations.ToArray()).ContinueWith(t => DisplaySentItem(t.Result));}).Start();
-                    session.Locations.CompleteLocationChecksAsync(locations.ToArray());
-                }
+                CheckIfGoaled(locations.Count);
+                session.Locations.ScoutLocationsAsync(locations.ToArray()).ContinueWith(t => DisplaySentItem(t.Result));
+                session.Locations.CompleteLocationChecksAsync(locations.ToArray());
             }
         }
         private static void DisplaySentItem(Dictionary<long, ScoutedItemInfo> packet){
