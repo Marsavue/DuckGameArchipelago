@@ -4,11 +4,11 @@ This project is based off of Duck Game Rebuilt.
 ### AI Disclosure
 Nothing I make is ever developed using AI, that does not necessarily include Duck Game Rebuilt
 
-## As of v0.0.4
+## Randomisation
 - Levels and Weapons are items you can receive
 - Locations are medals of your choice
-- Several simple yaml options
-
+- 13 Traps + 2 semi-useful Anti-traps
+- Death Link
 
 APWorld - https://github.com/Marsavue/Archipelago-DuckGame/releases/latest
 
@@ -23,9 +23,9 @@ Check pins in the [Archipelago discord](https://discord.com/channels/73120530124
 
 ### Guide
 1. Download [DuckGameArchipelago.zip](https://github.com/Marsavue/DuckGameArchipelago/releases/latest/download/DuckGameArchipelago.zip) from [Releases](https://github.com/Marsavue/DuckGameArchipelago/releases/latest) & unzip
-2. Windows run DuckGame.exe - Linux run DuckGame.sh (need mono installed)
+2. Windows run DuckGame.exe - Linux run DuckGame.sh
 3. Once game is open, configure slot settings in Pause>Options>Archipelago
-4. Walk into Arcade to connect
+4. Walk into Arcade or enter main game to connect
 
 # <img src="icon.png" height="32"> Duck Game Rebuilt
 
