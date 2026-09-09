@@ -449,7 +449,7 @@ ff_icons/animationControls12_24 2893 1936 12 96
 fingerPositions_m 3732 384 48 96
 _fingerPositionSprite7 4005 578 48 96
 winterTreeTop 1296 2483 96 48
-challengeTrophyIcons 3695 3444 16 96
+challengeTrophyIcons 3520 3824 16 112
 inkStain 1006 2480 96 16
 countdown 3964 2433 32 96
 hats/waffles 4028 3588 32 96
